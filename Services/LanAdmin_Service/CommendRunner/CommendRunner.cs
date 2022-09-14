@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-namespace LanAdmin_CommendRunner;
+namespace LanAdmin.CommendRunner;
 
-public class CommendRunner
+public static class CommendRunner
 {
-    public static Process? StartPowerShell()
+    public static Process StartPowerShell()
     {
         Process process = new();
 
@@ -22,10 +22,10 @@ public class CommendRunner
 
             return process;
         }
-        catch
+        catch (Exception ex)
         {
             try { process.Close(); } catch { }
-            return null;
+            throw new Exception("Cant start powershell:" + ex.Message);
         }
     }
     public static string[] RunCommend(Process process, string commend)
@@ -37,22 +37,20 @@ public class CommendRunner
         while (true)
         {
             string? input = process.StandardOutput.ReadLine();
-            if(input == null) continue;
+            if (input == null) continue;
 
-            if(input.StartsWith("PS")) continue;
-            if(input == "commend-ok") return output.ToArray();
+            if (input.StartsWith("PS")) continue;
+            if (input == "commend-ok") return output.ToArray();
 
             output.Add(input);
         }
     }
-    public static int CheckForError(string[] commendResualt)
+    public static void CheckForError(string[] commendResualt)
     {
         foreach (string i in commendResualt)
         {
-            if (i.EndsWith("The requested operation requires elevation.")) return -1;// ERR: permision error
+            if (i.EndsWith("The requested operation requires elevation.")) throw new Exception("permision error");
         }
-
-        return 0;// OK: end of checks
     }
     public static void StopPowerShell(Process process)
     {
