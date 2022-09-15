@@ -8,6 +8,6 @@ public class GUI : IGUI_responder
 
     public void ResponderAction(HttpListenerContext _context)
     {
-
+        GUI_helpers.SendHtmlRespond(_context, "<p>Hello World!</p>");
     }
 }

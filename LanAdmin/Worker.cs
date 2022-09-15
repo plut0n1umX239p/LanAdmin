@@ -1,21 +1,20 @@
-namespace LanAdmin
+namespace LanAdmin;
+
+public class PackageWorker : BackgroundService
 {
-    public class Worker : BackgroundService
+    private readonly ILogger<Worker> logger;
+
+    public PackageWorker(ILogger<Worker> _logger)
     {
-        private readonly ILogger<Worker> _logger;
-
-        public Worker(ILogger<Worker> logger)
+        logger = _logger;
+    }
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _logger = logger;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            PackageManager.PopulatePackageListFromFloder();
+            PackageManager.packageList[0].CLI.ResponderAction(new string[0] { } );
+            while (true);
         }
     }
 }

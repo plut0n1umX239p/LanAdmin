@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
-
 namespace LanAdmin;
 
 public interface IPackage
@@ -13,15 +12,16 @@ public interface IPackage
 
 public static class PackageManager
 {
-    public static List<string> packagesPaths = new() { @"C:\projectFiles\LanAdmin\Packages\LanAdminPackage_Tester\bin\Debug\net6.0\LanAdminPackage_Template.dll" };
+    public static string packagesPath = @"C:\projectFiles\LanAdmin\Packages\PackagesFolder";
 
     public static List<IPackage> packageList = new();
-    public static void PopulatePackageList()
+    public static void PopulatePackageListFromFloder()
     {
         packageList.Clear();
+        string[] folders = Directory.GetDirectories(packagesPath);
 
-        packageList = packagesPaths.SelectMany(_packagesPath =>
-        { return new List<IPackage>() { LoadPackage(_packagesPath) }; }).ToList();
+        foreach (string folderPath in folders)
+            packageList.Add(LoadPackage($"{folderPath}\\LanAdminPackage_{folderPath.Split('\\')[^1]}.dll"));
     }
 
     #region Load package context
@@ -74,6 +74,6 @@ public static class PackageManager
             }
 
         // cant find any IPackage class
-        throw new Exception("dll is not a package");
+        throw new Exception("dll is not a LanAdmin package");
     }
 }
