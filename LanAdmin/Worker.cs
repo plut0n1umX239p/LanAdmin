@@ -13,7 +13,7 @@ public class PackageWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             PackageManager.PopulatePackageListFromFloder();
-            PackageManager.packageList[0].CLI.ResponderAction(new string[0] { } );
+            PackageManager.packages["Template"].CLI.ResponderAction(new string[0] { } );
             while (true);
         }
     }

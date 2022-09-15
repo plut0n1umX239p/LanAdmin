@@ -8,7 +8,7 @@ public interface ICLI_responder
     public void ResponderAction(string[] _args);
 }
 
-/// <summary> this used to pass  </summary>
+/// <summary> this uses to pass  </summary>
 public class CLI_listener
 {
     public CLI_listener(ICLI_responder _responder)
