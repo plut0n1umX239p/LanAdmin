@@ -7,6 +7,6 @@ public class Tester : IPackage
 {
     public string Name => "template";
 
-    public IGUI_responder GUI => throw new NotImplementedException();
-    public ICLI_responder ClI => throw new NotImplementedException();
+    public IGUI_responder GUI => new GUI();
+    public ICLI_responder CLI => new CLI();
 }

@@ -8,6 +8,6 @@ public class CLI : ICLI_responder
 
     public void ResponderAction(string[] _args)
     {
-
+        Console.WriteLine("ok");
     }
 }
