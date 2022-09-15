@@ -2,11 +2,11 @@
 using System.Net;
 namespace LanAdminPackage.Tester;
 
-public class GUI : IGUI_responder
+public class CLI : ICLI_responder
 {
     public string Name => "template";
 
-    public void ResponderAction(HttpListenerContext _context)
+    public void ResponderAction(string[] _args)
     {
 
     }

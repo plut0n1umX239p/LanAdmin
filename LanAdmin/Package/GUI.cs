@@ -1,17 +1,20 @@
 ﻿using System.Net;
 using System.Text;
-
 namespace LanAdmin;
 
+/// <summary> every gui class must inhrait this in order to be functional </summary>
 public interface IGUI_responder
 {
+    /// <summary> name of package gone use this </summary>
     public string Name { get; }
     public void ResponderAction(HttpListenerContext _context);
 }
 
+/// <summary> a simple web server to listen to gui http calls </summary>
 public class GUI_listener
 {
-    public static string UrlBase = "http://localhost:80/";
+    /// <summary> if this changed all GUI_listener must reset to make effect </summary>
+    public static string UrlBase = "http://localhost:8080/";
     public GUI_listener(IGUI_responder _responder)
     {
         if (!HttpListener.IsSupported)
@@ -27,28 +30,25 @@ public class GUI_listener
     public void Start()
     {
         listener.Start();
-        Task.Run(() => //answer http requests on other thread
+        Task.Run(() =>
         {
-            while (listener.IsListening)//task will end if listening stops
+            while (listener.IsListening)
             {
                 HttpListenerContext context = listener.GetContext();
-                try
-                {
-                    if (context == null) return;//null check
-                    byte[] respond = Encoding.UTF8.GetBytes(responderMethod(context));//genarate respont
+                if(context == null) continue;
 
-                    //send it use stream
-                    context.Response.ContentLength64 = respond.Length;
-                    context.Response.OutputStream.Write(respond, 0, respond.Length);
-                }
-                catch { }
-                if (context != null) context.Response.OutputStream.Close();//close stream after sending or error
+                responder.ResponderAction(context);
+                context.Response.OutputStream.Close();
             }
         });
-
+    }
+    public void Stop()
+    {
+        listener.Stop();
     }
 }
 
+/// <summary> contine functions that helps in gui dev </summary>
 public static class GUI_helpers
 {
     public static void SendHtmlRespond(HttpListenerContext _context, string _html)
@@ -57,9 +57,5 @@ public static class GUI_helpers
 
         _context.Response.ContentLength64 = buffer.Length;
         _context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-    }
-    public static void CloseConnection(HttpListenerContext _context, string _html)
-    {
-
     }
 }

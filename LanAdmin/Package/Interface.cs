@@ -7,5 +7,5 @@ public interface IPackage
     public string Name { get; }
 
     IGUI_responder GUI { get; }
-    void CLI_responder(string[] _args);
+    ICLI_responder ClI { get; }
 }
