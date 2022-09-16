@@ -1,10 +1,10 @@
 namespace LanAdmin;
 
-public class PackageWorker : BackgroundService
+public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> logger;
 
-    public PackageWorker(ILogger<Worker> _logger)
+    public Worker(ILogger<Worker> _logger)
     {
         logger = _logger;
     }
@@ -12,9 +12,11 @@ public class PackageWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            PackageManager.PopulatePackageListFromFloder();
-            PackageManager.packages["Template"].CLI.ResponderAction(new string[0] { } );
-            while (true);
+            
+            while (true)
+            {
+
+            }
         }
     }
 }
